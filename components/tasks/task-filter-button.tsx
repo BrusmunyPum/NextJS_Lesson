@@ -1,17 +1,18 @@
-type TaskFilterButtonProps<Tvalue extends string> = {
+type TaskFilterButtonProps<TValue extends string> = {
   label: string;
-  value: Tvalue;
-  activeValue: Tvalue;
-  onSelect: (value: Tvalue) => void;
+  value: TValue;
+  activeValue: TValue;
+  onSelect: (value: TValue) => void;
 };
 
-export function TaskFilterButton<Tvalue extends string>({
+export function TaskFilterButton<TValue extends string>({
   label,
   value,
   activeValue,
   onSelect,
-}: TaskFilterButtonProps<Tvalue>) {
+}: TaskFilterButtonProps<TValue>) {
   const isActive = value === activeValue;
+
   return (
     <button
       type="button"

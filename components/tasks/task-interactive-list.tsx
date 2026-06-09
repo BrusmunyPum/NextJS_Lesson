@@ -6,6 +6,7 @@ import {TaskEmptyState} from "@/components/tasks/task-empty-state";
 import {TaskSearchInput} from "@/components/tasks/task-search-input";
 import type {Task, TaskStatus} from "@/features/tasks/types";
 import {TaskFilterButton} from "@/components/tasks/task-filter-button";
+import {TaskCount} from "@/components/tasks/task-count";
 
 type FilterValue = "all" | TaskStatus;
 
@@ -70,9 +71,10 @@ export function TaskInteractiveList({ tasks }: TaskInteractiveListProps) {
         ))}
       </div>
 
-      <p className="text-sm text-slate-400">
-        Showing {filteredTasks.length} of {tasks.length} tasks
-      </p>
+      <TaskCount
+        visibleCount={filteredTasks.length}
+        totalCount={tasks.length}
+      />
 
       {filteredTasks.length === 0 ? (
         <TaskEmptyState
