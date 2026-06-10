@@ -1,31 +1,15 @@
 import Link from "next/link";
-import React from "react";
 
 type DashboardShellProps = {
   children: React.ReactNode;
 };
 
 const dashboardNavItems = [
-  {
-    label: "Overview",
-    href: "/dashboard",
-  },
-  {
-    label: "Tasks",
-    href: "/dashboard/tasks",
-  },
-  {
-    label: "Reports",
-    href: "/dashboard/reports",
-  },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-  },
-  {
-    label: "Team",
-    href: "/dashboard/team",
-  },
+  { label: "Overview", href: "/dashboard" },
+  { label: "Tasks", href: "/dashboard/tasks" },
+  { label: "Reports", href: "/dashboard/reports" },
+  { label: "Settings", href: "/dashboard/settings" },
+  { label: "Team", href: "/dashboard/team" },
 ];
 
 export function DashboardShell({ children }: DashboardShellProps) {

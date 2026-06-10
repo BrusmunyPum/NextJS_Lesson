@@ -1,3 +1,5 @@
+"use client";
+
 type TaskSearchInputProps = {
   value: string;
   onChange: (value: string) => void;

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import React from "react";
 
 export const metadata: Metadata = {
   title: "Dashboard | Task Management Frontend",

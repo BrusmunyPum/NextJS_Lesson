@@ -1,12 +1,12 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import {TaskCard} from "@/components/tasks/task-card";
-import {TaskEmptyState} from "@/components/tasks/task-empty-state";
-import {TaskSearchInput} from "@/components/tasks/task-search-input";
-import type {Task, TaskStatus} from "@/features/tasks/types";
-import {TaskFilterButton} from "@/components/tasks/task-filter-button";
-import {TaskCount} from "@/components/tasks/task-count";
+import { useState } from "react";
+import { TaskCard } from "@/components/tasks/task-card";
+import { TaskEmptyState } from "@/components/tasks/task-empty-state";
+import { TaskSearchInput } from "@/components/tasks/task-search-input";
+import type { Task, TaskStatus } from "@/features/tasks/types";
+import { TaskFilterButton } from "@/components/tasks/task-filter-button";
+import { TaskCount } from "@/components/tasks/task-count";
 
 type FilterValue = "all" | TaskStatus;
 
@@ -14,26 +14,11 @@ type TaskInteractiveListProps = {
   tasks: Task[];
 };
 
-const filters: {
-  label: string;
-  value: FilterValue;
-}[] = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Todo",
-    value: "todo",
-  },
-  {
-    label: "In Progress",
-    value: "in-progress",
-  },
-  {
-    label: "Completed",
-    value: "completed",
-  },
+const filters: { label: string; value: FilterValue }[] = [
+  { label: "All", value: "all" },
+  { label: "Todo", value: "todo" },
+  { label: "In Progress", value: "in-progress" },
+  { label: "Completed", value: "completed" },
 ];
 
 export function TaskInteractiveList({ tasks }: TaskInteractiveListProps) {
@@ -43,17 +28,11 @@ export function TaskInteractiveList({ tasks }: TaskInteractiveListProps) {
   const filteredTasks = tasks.filter((task) => {
     const matchesStatus =
       activeFilter === "all" || task.status === activeFilter;
-
     const matchesSearch = task.title
       .toLowerCase()
       .includes(searchText.toLowerCase());
-
     return matchesStatus && matchesSearch;
   });
-
-  useEffect(() => {
-    document.title = `Tasks (${filteredTasks.length})`;
-  }, [filteredTasks.length]);
 
   return (
     <section className="flex flex-col gap-5">

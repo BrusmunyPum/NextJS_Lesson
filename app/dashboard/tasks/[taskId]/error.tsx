@@ -4,16 +4,11 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 type TaskDetailErrorProps = {
-  error: Error & {
-    digest?: string;
-  };
-  unstable_retry: () => void;
+  error: Error & { digest?: string };
+  reset: () => void;
 };
 
-export default function TaskDetailError({
-  error,
-  unstable_retry,
-}: TaskDetailErrorProps) {
+export default function TaskDetailError({ error, reset }: TaskDetailErrorProps) {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -36,7 +31,7 @@ export default function TaskDetailError({
       <div className="mt-6 flex flex-wrap gap-3">
         <button
           type="button"
-          onClick={() => unstable_retry()}
+          onClick={reset}
           className="rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-400"
         >
           Try again

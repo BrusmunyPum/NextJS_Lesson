@@ -3,7 +3,7 @@ import { RecentTaskList } from "@/components/tasks/recent-task-list";
 import { mockTasks } from "@/features/tasks/data/mock-tasks";
 import Link from "next/link";
 
-const dashboardState = [
+const dashboardStats = [
   {
     title: "Total Tasks",
     value: 24,
@@ -49,21 +49,25 @@ export default function HomePage() {
             with routing, forms, authentication UI, API integration, and
             reusable components.
           </p>
-          <Link
-            href="/dashboard/tasks"
-            className="inline-flex rounded-xl bg-blue-500 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-400"
-          >
-            View Tasks
-          </Link>
-          <Link
-            href="/dashboard/reports"
-            className="inline-flex rounded-xl bg-blue-500 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-400"
-          >
-            View Reports
-          </Link>
+
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/dashboard/tasks"
+              className="inline-flex rounded-xl bg-blue-500 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-400"
+            >
+              View Tasks
+            </Link>
+            <Link
+              href="/dashboard/reports"
+              className="inline-flex rounded-xl bg-slate-800 px-5 py-3 text-sm font-medium text-slate-200 transition hover:bg-slate-700"
+            >
+              View Reports
+            </Link>
+          </div>
         </div>
+
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {dashboardState.map((item) => (
+          {dashboardStats.map((item) => (
             <StatCard
               key={item.title}
               title={item.title}

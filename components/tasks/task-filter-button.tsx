@@ -1,3 +1,5 @@
+"use client";
+
 type TaskFilterButtonProps<TValue extends string> = {
   label: string;
   value: TValue;
