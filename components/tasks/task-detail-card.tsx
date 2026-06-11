@@ -1,4 +1,5 @@
 import type { Task } from "@/features/tasks/types";
+import { TaskStatusBadge } from "@/components/tasks/task-status-badge";
 
 type TaskDetailCardProps = {
   task: Task;
@@ -10,7 +11,9 @@ export function TaskDetailCard({ task }: TaskDetailCardProps) {
       <dl className="grid gap-5 sm:grid-cols-2">
         <div>
           <dt className="text-sm text-slate-400">Status</dt>
-          <dd className="mt-1 font-medium text-white">{task.status}</dd>
+          <dd className="mt-1">
+            <TaskStatusBadge status={task.status} />
+          </dd>
         </div>
 
         <div>

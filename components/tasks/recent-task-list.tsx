@@ -1,4 +1,5 @@
 import type { Task } from "@/features/tasks/types";
+import { TaskStatusBadge } from "@/components/tasks/task-status-badge";
 import Link from "next/link";
 
 type RecentTaskListProps = {
@@ -21,24 +22,24 @@ export function RecentTaskList({ tasks }: RecentTaskListProps) {
         {recentTasks.map((task) => (
           <div
             key={task.id}
-            className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 px-4 py-3"
+            className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
           >
-            <div>
-              <p className="text-sm font-medium text-white">{task.title}</p>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-white">
+                {task.title}
+              </p>
               <p className="mt-1 text-xs text-slate-500">
                 {task.assigneeName} · Due {task.dueDate}
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
-              <span className="rounded-full bg-slate-800 px-3 py-1 text-xs font-medium text-slate-300">
-                {task.status}
-              </span>
+            <div className="flex shrink-0 items-center gap-3">
+              <TaskStatusBadge status={task.status} />
               <Link
                 href={`/dashboard/tasks/${task.id}`}
                 className="text-xs font-medium text-blue-400 transition hover:text-blue-300"
               >
-                View
+                View →
               </Link>
             </div>
           </div>

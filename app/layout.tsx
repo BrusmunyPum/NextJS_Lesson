@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Task Management Frontend",
+  title: {
+    template: "%s | Task Management",
+    default: "Task Management",
+  },
   description: "A learning project built with Next.js and TypeScript.",
 };
 

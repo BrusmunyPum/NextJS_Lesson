@@ -3,11 +3,22 @@ export type TaskStatus = "todo" | "in-progress" | "completed";
 export type TaskPriority = "low" | "medium" | "high";
 
 export type Task = {
-    id: string;
-    title: string;
-    description?: string;
-    status: TaskStatus;
-    priority: TaskPriority;
-    dueDate: string;
-    assigneeName: string;
+  id: string;
+  title: string;
+  description?: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  dueDate: string;
+  assigneeName: string;
+};
+
+export type DashboardStat = {
+  title: string;
+  value: number;
+  description: string;
+};
+
+export type NavItem = {
+  label: string;
+  href: string;
 };

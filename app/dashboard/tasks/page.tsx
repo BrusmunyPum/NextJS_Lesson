@@ -1,27 +1,46 @@
+import type { Metadata } from "next";
 import { TaskInteractiveList } from "@/components/tasks/task-interactive-list";
+import { PageHeader } from "@/components/ui/page-header";
 import { getTasks } from "@/features/tasks/data/task-queries";
+import type { TaskStatus } from "@/features/tasks/types";
 
-export default async function TasksPage() {
+export const metadata: Metadata = {
+  title: "Tasks",
+};
+
+type TasksPageProps = {
+  searchParams: Promise<{
+    status?: string;
+    search?: string;
+    page?: string;
+  }>;
+};
+
+const VALID_STATUSES: TaskStatus[] = ["todo", "in-progress", "completed"];
+
+export default async function TasksPage({ searchParams }: TasksPageProps) {
   const tasks = await getTasks();
+  const { status, search, page } = await searchParams;
+
+  // Validate — ignore unknown status values from URL
+  const activeStatus =
+    status && VALID_STATUSES.includes(status as TaskStatus)
+      ? (status as TaskStatus)
+      : undefined;
 
   return (
     <section className="flex flex-col gap-6">
-      <div>
-        <p className="text-sm font-medium uppercase tracking-wide text-blue-400">
-          Task Management
-        </p>
-
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-white">
-          Tasks
-        </h1>
-
-        <p className="mt-2 max-w-2xl text-slate-300">
-          This page is a Server Component. The interactive list handles search
-          and filtering in the browser.
-        </p>
-      </div>
-
-      <TaskInteractiveList tasks={tasks} />
+      <PageHeader
+        eyebrow="Task Management"
+        title="Tasks"
+        description="Browse, search, and filter all tasks in your workspace."
+      />
+      <TaskInteractiveList
+        tasks={tasks}
+        initialStatus={activeStatus}
+        initialSearch={search ?? ""}
+        initialPage={page ? Math.max(1, parseInt(page)) : 1}
+      />
     </section>
   );
 }
