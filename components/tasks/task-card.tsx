@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Task } from "@/features/tasks/types";
 import { TaskStatusBadge } from "@/components/tasks/task-status-badge";
 import Link from "next/link";
@@ -6,7 +7,10 @@ type TaskCardProps = {
   task: Task;
 };
 
-export function TaskCard({ task }: TaskCardProps) {
+// memo — skips re-render if the task prop reference hasn't changed.
+// Since tasks come from useMemo in TaskInteractiveList, changing filters
+// only re-renders cards whose task object is new.
+export const TaskCard = memo(function TaskCard({ task }: TaskCardProps) {
   return (
     <article className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -41,4 +45,4 @@ export function TaskCard({ task }: TaskCardProps) {
       </Link>
     </article>
   );
-}
+});
