@@ -1,26 +1,38 @@
-import { mockTasks } from "@/features/tasks/data/mock-tasks";
+import type { Task } from "@/features/tasks/types";
 
-// loading function (wait)
-function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
+
+// ── Server-side queries (called from Server Components) ───────────────────────
+
+export async function getTasks(): Promise<Task[]> {
+  const res = await fetch(`${API_BASE}/api/tasks`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch tasks");
+
+  return res.json();
 }
 
-export async function getTasks() {
-  await wait(800);
+export async function getTaskById(taskId: string): Promise<Task | undefined> {
+  if (taskId === "task-error") throw new Error("Failed to get task details.");
 
-  return mockTasks;
+  const res = await fetch(`${API_BASE}/api/tasks/${taskId}`, {
+    cache: "no-store",
+  });
+
+  if (res.status === 404) return undefined;
+  if (!res.ok) throw new Error("Failed to fetch task");
+
+  return res.json();
 }
 
-export async function getTaskById(taskId: string) {
-  await wait(1000);
+export async function getCompletedTasks(): Promise<Task[]> {
+  const res = await fetch(`${API_BASE}/api/tasks?status=completed`, {
+    cache: "no-store",
+  });
 
-  if (taskId === "task-error") {
-    throw new Error("Failed to get task details.");
-  }
+  if (!res.ok) throw new Error("Failed to fetch completed tasks");
 
-  return mockTasks.find((task) => task.id === taskId);
-}
-
-export function getCompletedTasks() {
-  return mockTasks.filter((task) => task.status === "completed");
+  return res.json();
 }
