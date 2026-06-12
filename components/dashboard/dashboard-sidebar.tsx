@@ -1,10 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 
 export function DashboardSidebar() {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Close sidebar when Escape key is pressed
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setIsOpen(false);
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown); // cleanup on unmount
+    };
+  }, []); // no deps — setIsOpen is stable, no re-registration needed
 
   return (
     <>

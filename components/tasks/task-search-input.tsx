@@ -1,11 +1,20 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 type TaskSearchInputProps = {
   value: string;
   onChange: (value: string) => void;
 };
 
 export function TaskSearchInput({ value, onChange }: TaskSearchInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus the input when the component mounts
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []); // empty deps = run once on mount
+
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
       <label
@@ -16,6 +25,7 @@ export function TaskSearchInput({ value, onChange }: TaskSearchInputProps) {
       </label>
 
       <input
+        ref={inputRef}
         id="task-search"
         type="text"
         value={value}

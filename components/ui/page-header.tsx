@@ -1,10 +1,10 @@
-import React from "react";
+import { ReactNode } from "react";
 
 type PageHeaderProps = {
   eyebrow?: string;
   title: string;
   description?: string;
-  action?: React.ReactNode;
+  action?: ReactNode
 };
 
 export function PageHeader({
