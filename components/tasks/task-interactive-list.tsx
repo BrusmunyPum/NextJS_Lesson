@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useDebounce } from "@/hooks/use-debounce";
 import { TaskCard } from "@/components/tasks/task-card";
@@ -64,13 +64,26 @@ export function TaskInteractiveList({
     page: initialPage,
   });
 
-  // Debounce the search text — URL only updates 300ms after user stops typing
   const debouncedSearch = useDebounce(filterState.search, 300);
 
+  // ─── Fix: keep searchParams in a ref ─────────────────────────────────────
+  // Problem: updateParams depended on searchParams. When router.replace() ran,
+  // searchParams changed → updateParams got a new reference → useEffect fired
+  // again → router.replace() again → infinite loop.
+  //
+  // Solution: read searchParams from a ref inside updateParams. The ref always
+  // holds the latest value but is NOT a dependency — so updateParams never
+  // gets recreated when the URL changes.
+  const searchParamsRef = useRef(searchParams);
+  useEffect(() => {
+    searchParamsRef.current = searchParams;
+  }, [searchParams]);
+
   // ─── URL sync helper ──────────────────────────────────────────────────────
+  // Depends only on router + pathname (stable values) — NOT searchParams.
   const updateParams = useCallback(
     (updates: Partial<Record<"status" | "search" | "page", string | undefined>>) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParamsRef.current.toString());
       Object.entries(updates).forEach(([key, value]) => {
         if (value === undefined || value === "" || value === "all") {
           params.delete(key);
@@ -80,12 +93,22 @@ export function TaskInteractiveList({
       });
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    [router, pathname, searchParams],
+    [router, pathname],
   );
 
-  // ─── Sync debounced search to URL ─────────────────────────────────────────
-  // Runs only when debouncedSearch settles — not on every keystroke
+  // ─── Fix: skip first render ───────────────────────────────────────────────
+  // Problem: useEffect fires on mount even when nothing changed. This caused
+  // an immediate router.replace() which triggered a server re-fetch on load.
+  //
+  // Solution: track first render with a ref. Skip the effect on mount —
+  // only fire it when the user actually types (debouncedSearch changes).
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     updateParams({ search: debouncedSearch || undefined, page: undefined });
   }, [debouncedSearch, updateParams]);
 
@@ -96,7 +119,6 @@ export function TaskInteractiveList({
     updateParams({ status: value === "all" ? undefined : value, page: undefined });
   }
 
-  // Search only updates local state — URL update is handled by the useEffect above
   function handleSearchChange(value: string) {
     setFilterState((prev) => ({ ...prev, search: value, page: 1 }));
   }
@@ -107,6 +129,7 @@ export function TaskInteractiveList({
   }
 
   // ─── Derived data ─────────────────────────────────────────────────────────
+
   const filteredTasks = useMemo(
     () =>
       tasks.filter((task) => {
